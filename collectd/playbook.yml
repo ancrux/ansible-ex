@@ -9,11 +9,11 @@
   # accelerate: true
 
   vars:
-    graphite_host: "new.graphite.host"
-    graphite_port: "20030"
+    graphite_host: "172.16.33.99"
+    graphite_port: "2003"
     graphite_protocol: "udp"
-    graphite_prefix: "prefix-"
-    graphite_postfix: "-postfix"
+    graphite_prefix: ""
+    graphite_postfix: ""
 
   remote_user: root
 
@@ -27,16 +27,30 @@
   - name: install collectd
     yum: pkg=/tmp/rpms/collectd-5.5.0-1.el6.x86_64.rpm,/tmp/rpms/collectd-base-config-1.0.0-1000.el6.noarch.rpm
     
-  - name: setup collectd
-    replace:
+  - name: setup /etc/collectd.conf
+    lineinfile: dest=/etc/collectd.conf line='Include "/etc/collectd.d/*.conf"'
+    notify:
+    - restart collectd
+    
+  - name: setup write_graphite for collectd
+    lineinfile:
       dest=/etc/collectd.d/write_graphite.conf
       regexp='{{ item.regexp }}'
-      replace='{{ item.replace }}'
-      backup=no
+      line='{{ item.line }}'
+      backrefs=yes
     with_items:
-    - { regexp: '(\s+Host\s+)"(.*)"', replace: '\1"{{ graphite_host }}"' }
-    - { regexp: '(\s+Port\s+)"(.*)"', replace: '\1"{{ graphite_port }}"' }
-    - { regexp: '(\s+Protocol\s+)"(.*)"', replace: '\1"{{ graphite_protocol }}"' }
-    - { regexp: '(\s+Prefix\s+)"(.*)"', replace: '\1"{{ graphite_prefix }}"' }
-    - { regexp: '(\s+Postfix\s+)"(.*)"', replace: '\1"{{ graphite_postfix }}"' }
+    - { regexp: '^(\s+Host\s+)"(.*)"', line: '\1"{{ graphite_host }}"' }
+    - { regexp: '^(\s+Port\s+)"(.*)"', line: '\1"{{ graphite_port }}"' }
+    - { regexp: '^(\s+Protocol\s+)"(.*)"', line: '\1"{{ graphite_protocol }}"' }
+    - { regexp: '^(\s+Prefix\s+)"(.*)"', line: '\1"{{ graphite_prefix }}"' }
+    - { regexp: '^(\s+Postfix\s+)"(.*)"', line: '\1"{{ graphite_postfix }}"' }
+    notify:
+    - restart collectd
+  
+  - name: start collectd and enable it at boot
+    service: name=collectd state=started enabled=yes
+    
+  handlers:
+  - name: restart collectd
+    service: name=collectd state=restarted
 
