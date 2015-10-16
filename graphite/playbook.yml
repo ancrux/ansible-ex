@@ -5,7 +5,7 @@
 # yum install -y ansible (deploy)
 # yum install -y libselinux-python (target)
 ---
-- hosts: 172.16.33.103
+- hosts: all
 
   vars:
     http_port: 80
