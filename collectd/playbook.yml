@@ -25,7 +25,7 @@
     synchronize: src=./tmp/rpms dest=/tmp/ delete=yes
     
   - name: install collectd
-    yum: pkg=/tmp/rpms/collectd-5.5.0-1.el6.x86_64.rpm,/tmp/rpms/collectd-base-config-1.0.0-1000.el6.noarch.rpm
+    yum: pkg=/tmp/rpms/collectd-5.5.0-1.el6.x86_64.rpm,/tmp/rpms/collectd-python-5.5.0-1.el6.x86_64.rpm,/tmp/rpms/collectd-base-config-1.0.0-1000.el6.noarch.rpm
     
   - name: setup /etc/collectd.conf
     lineinfile: dest=/etc/collectd.conf line='Include "/etc/collectd.d/*.conf"'
