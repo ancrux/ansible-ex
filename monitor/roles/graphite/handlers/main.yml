@@ -1,0 +1,13 @@
+#!/usr/bin/ansible-playbook
+# http://docs.ansible.com/ansible/modules_by_category.html
+
+# requirements:
+# yum install -y ansible (deploy)
+# yum install -y libselinux-python (target)
+---
+- name: restart httpd
+  service: name=httpd state=restarted
+  
+- name: restart carbon-cache
+  service: name=carbon-cache state=restarted
+

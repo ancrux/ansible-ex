@@ -1,0 +1,41 @@
+#!/usr/bin/ansible-playbook
+# http://docs.ansible.com/ansible/modules_by_category.html
+
+---
+- name: install rsync
+  yum: pkg=rsync state=latest
+
+- name: copy rpms
+  synchronize: src=./rpms dest=/tmp/ delete=yes
+  
+- name: install collectd
+  yum: pkg='{{ item.pkg }}'
+  with_items:
+  - { pkg: '/tmp/rpms/collectd-5.5.0-1.el6.x86_64.rpm' }
+  - { pkg: '/tmp/rpms/collectd-python-5.5.0-1.el6.x86_64.rpm' }
+  - { pkg: '/tmp/rpms/collectd-base-config-1.0.0-1000.el6.noarch.rpm' }
+  - { pkg: 'libselinux-python' }
+  
+- name: setup /etc/collectd.conf
+  lineinfile: dest=/etc/collectd.conf line='Include "/etc/collectd.d/*.conf"'
+  notify:
+  - restart collectd
+  
+- name: setup write_graphite for collectd
+  lineinfile:
+    dest=/etc/collectd.d/write_graphite.conf
+    regexp='{{ item.regexp }}'
+    line='{{ item.line }}'
+    backrefs=yes
+  with_items:
+  - { regexp: '^(\s+Host\s+)"(.*)"', line: '\1"{{ graphite_host }}"' }
+  - { regexp: '^(\s+Port\s+)"(.*)"', line: '\1"{{ graphite_port }}"' }
+  - { regexp: '^(\s+Protocol\s+)"(.*)"', line: '\1"{{ graphite_protocol }}"' }
+  - { regexp: '^(\s+Prefix\s+)"(.*)"', line: '\1"{{ graphite_prefix }}"' }
+  - { regexp: '^(\s+Postfix\s+)"(.*)"', line: '\1"{{ graphite_postfix }}"' }
+  notify:
+  - restart collectd
+
+- name: start collectd and enable it at boot
+  service: name=collectd state=started enabled=yes
+

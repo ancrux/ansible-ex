@@ -1,0 +1,16 @@
+#!/usr/bin/ansible-playbook
+# http://docs.ansible.com/ansible/modules_by_category.html
+
+# requirements:
+# yum install -y ansible (deploy)
+# yum install -y libselinux-python (target)
+---
+- hosts: graphite
+  roles:
+  - graphite
+
+- hosts: targets
+  roles:
+  - collectd
+  
+

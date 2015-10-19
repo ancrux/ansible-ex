@@ -1,0 +1,7 @@
+#!/usr/bin/ansible-playbook
+# http://docs.ansible.com/ansible/modules_by_category.html
+
+---
+- name: restart collectd
+  service: name=collectd state=restarted
+
