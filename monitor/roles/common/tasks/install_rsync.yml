@@ -5,13 +5,8 @@
 # yum install -y ansible (deploy)
 # yum install -y libselinux-python (target)
 ---
-- hosts: graphite
-  roles:
-  - graphite
-  - graphite-beacon
+- name: install rsync (latest)
+  yum: pkg=rsync state=latest
 
-- hosts: targets
-  roles:
-  - collectd
-  
+
 

@@ -1,0 +1,17 @@
+#!/usr/bin/ansible-playbook
+# http://docs.ansible.com/ansible/modules_by_category.html
+
+# requirements:
+# yum install -y ansible (deploy)
+# yum install -y libselinux-python (target)
+---
+- include: ../../common/tasks/install_rsync.yml
+
+- include: ../../common/tasks/install_pip.yml
+  
+# pip: requirements=/my_app/requirements.txt
+- name: install graphite-beacon (latest)
+  pip: name=graphite-beacon state=latest
+  
+- name: setup graphite-beacon
+  synchronize: src=./etc/graphite-beacon dest=/etc/

@@ -2,8 +2,7 @@
 # http://docs.ansible.com/ansible/modules_by_category.html
 
 ---
-- name: install rsync
-  yum: pkg=rsync state=latest
+- include: ../../common/tasks/install_rsync.yml
 
 - name: copy rpms
   synchronize: src=./rpms dest=/tmp/ delete=yes

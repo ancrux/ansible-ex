@@ -1,0 +1,18 @@
+#!/usr/bin/ansible-playbook
+# http://docs.ansible.com/ansible/modules_by_category.html
+
+# requirements:
+# yum install -y ansible (deploy)
+# yum install -y libselinux-python (target)
+---
+- name: install pip (latest)
+  yum: pkg=python-pip state=latest
+  
+- name: upgrade pip (latest)
+  pip: name=pip state=latest
+
+- name: install setuptools (latest)
+  pip: name=setuptools state=latest
+
+
+

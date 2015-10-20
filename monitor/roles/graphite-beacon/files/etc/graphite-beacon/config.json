@@ -1,0 +1,33 @@
+{
+  "interval": "20minute",
+  "logging": "debug",
+
+  "debug": true,
+
+  "public_graphite_url": "http://172.16.33.99",
+  "graphite_url": "http://localhost",
+  
+  "smtp": {
+    "host": "172.16.33.101",
+    "port": 25,
+    "from": "beacon@graphite.org",
+    "to": ["angus_liu@trend.com.tw"]
+  },
+
+  "alerts": [
+    {
+      "name": "Memory",
+      "query": "aliasByNode(*.memory.memory-free, 1)",
+      "interval": "10minute",
+      "format": "bytes",
+      "rules": ["warning: < 300MB", "critical: > 200MB"]
+    },
+    {
+      "name": "Site",
+      "source": "url",
+      "query": "http://www.angusliu.com",
+      "interval": "20second",
+      "rules": ["critical: != 200"]
+    }
+  ]
+}
