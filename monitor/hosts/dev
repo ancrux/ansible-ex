@@ -12,3 +12,7 @@ graphite_postfix = ""
 172.16.33.99
 172.16.33.101
 
+[monitor-all:children]
+monitor-targets
+monitor-db
+
