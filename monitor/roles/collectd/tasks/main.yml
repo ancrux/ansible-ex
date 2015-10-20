@@ -6,14 +6,27 @@
 
 - name: copy rpms
   synchronize: src=./rpms dest=/tmp/ delete=yes
-  
-- name: install collectd
+
+# el6 | install collectd  
+- name: install collectd (5.5) | el6
   yum: pkg='{{ item.pkg }}'
   with_items:
   - { pkg: '/tmp/rpms/collectd-5.5.0-1.el6.x86_64.rpm' }
   - { pkg: '/tmp/rpms/collectd-python-5.5.0-1.el6.x86_64.rpm' }
-  - { pkg: '/tmp/rpms/collectd-base-config-1.0.0-1000.el6.noarch.rpm' }
-  - { pkg: 'libselinux-python' }
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '6'
+
+# el7 | install collectd 
+- include: ../../common/tasks/install_epel-release.yml
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'
+  
+- name: install collectd (latest) | el7
+  yum: pkg='{{ item.pkg }}'
+  with_items:
+  - { pkg: 'collectd' }
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'
+  
+- name: copy /etc/collectd.d/*.conf
+  synchronize: src=./etc/collectd.d dest=/etc/
   
 - name: setup /etc/collectd.conf
   lineinfile: dest=/etc/collectd.conf line='Include "/etc/collectd.d/*.conf"'

@@ -9,5 +9,6 @@ graphite_postfix = ""
 "{{ graphite_host }}"
 
 [monitor-targets]
+172.16.33.99
 172.16.33.101
 
