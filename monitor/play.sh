@@ -1,5 +1,5 @@
 #!/bin/bash
 
-#ansible-playbook playbook.yml -i ./hosts/dev --limit graphite
-#ansible-playbook playbook.yml -i ./hosts/dev --limit targets
-ansible-playbook playbook.yml -i ./hosts/dev
+ansible-playbook playbook.yml -i ./hosts/dev --limit monitor-db
+#ansible-playbook playbook.yml -i ./hosts/dev --limit monitor-targets
+#ansible-playbook playbook.yml -i ./hosts/dev

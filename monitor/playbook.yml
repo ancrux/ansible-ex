@@ -5,12 +5,12 @@
 # yum install -y ansible (deploy)
 # yum install -y libselinux-python (target)
 ---
-- hosts: graphite
+- hosts: monitor-db
   roles:
   - graphite
   - graphite-beacon
 
-- hosts: targets
+- hosts: monitor-targets
   roles:
   - collectd
   

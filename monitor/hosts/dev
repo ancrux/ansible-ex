@@ -5,9 +5,9 @@ graphite_protocol = "udp"
 graphite_prefix = ""
 graphite_postfix = ""
 
-[graphite]
+[monitor-db]
 "{{ graphite_host }}"
 
-[targets]
+[monitor-targets]
 172.16.33.101
 
