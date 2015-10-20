@@ -1,0 +1,11 @@
+#!/usr/bin/ansible-playbook
+# http://docs.ansible.com/ansible/modules_by_category.html
+
+# requirements:
+# yum install -y ansible (deploy)
+# yum install -y libselinux-python (target)
+---  
+- name: install epel-release (latest)
+  yum: pkg=epel-release state=latest
+
+

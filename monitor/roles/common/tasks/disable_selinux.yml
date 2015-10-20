@@ -1,0 +1,15 @@
+#!/usr/bin/ansible-playbook
+# http://docs.ansible.com/ansible/modules_by_category.html
+
+# requirements:
+# yum install -y ansible (deploy)
+# yum install -y libselinux-python (target)
+---
+- name: install libselinux-python (latest)
+  yum: pkg=libselinux-python state=latest
+
+- name: disable selinux
+  selinux: state=disabled
+
+
+

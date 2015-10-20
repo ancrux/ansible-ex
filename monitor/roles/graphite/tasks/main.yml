@@ -5,14 +5,9 @@
 # yum install -y ansible (deploy)
 # yum install -y libselinux-python (target)
 ---
-- name: install libselinux-python (latest)
-  yum: pkg=libselinux-python state=latest
+- include: ../../common/tasks/disable_selinux.yml
 
-- name: disable selinux
-  selinux: state=disabled
-  
-- name: install epel-release (latest)
-  yum: pkg=epel-release state=latest
+- include: ../../common/tasks/install_epel-release.yml
   
 - name: install graphite (latest)
   yum: pkg=supervisor,graphite-web,python-carbon state=latest
