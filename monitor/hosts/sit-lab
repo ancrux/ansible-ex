@@ -1,0 +1,18 @@
+[all:vars]
+graphite_host = "172.16.33.103"
+graphite_port = "2003"
+graphite_protocol = "udp"
+graphite_prefix = ""
+graphite_postfix = ""
+
+[monitor-db]
+"{{ graphite_host }}"
+
+[monitor-targets]
+ps-mgnt01.trend.lava.tw
+ps-ap[01:04].trend.lava.tw
+
+[monitor-all:children]
+monitor-targets
+monitor-db
+
