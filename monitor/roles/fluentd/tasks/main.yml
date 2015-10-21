@@ -29,3 +29,5 @@
   shell: /usr/sbin/td-agent-gem install fluent-plugin-elasticsearch
   when: check_plugin_elasticsearch.stdout.find('fluent-plugin-elasticsearch') == -1
 
+- name: start fluentd and enable it at boot
+  service: name=td-agent state=started enabled=yes

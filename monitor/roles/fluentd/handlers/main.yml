@@ -1,0 +1,7 @@
+#!/usr/bin/ansible-playbook
+# http://docs.ansible.com/ansible/modules_by_category.html
+
+---
+- name: restart td-agent
+  service: name=td-agent state=restarted
+
