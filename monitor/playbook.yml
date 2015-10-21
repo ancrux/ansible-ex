@@ -13,5 +13,6 @@
 - hosts: monitor-targets
   roles:
   - collectd
+  - fluentd
   
 

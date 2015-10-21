@@ -1,0 +1,16 @@
+#!/usr/bin/ansible-playbook
+# http://docs.ansible.com/ansible/modules_by_category.html
+
+---
+# install fluentd
+- name: install curl (present)
+  yum: pkg=curl state=present
+
+#- name: download td-agent.sh
+#  get_url: url=https://toolbelt.treasuredata.com/sh/install-redhat-td-agent2.sh dest=/tmp/install-redhat-td-agent2.sh mode=755
+
+# install-redhat-td-agent2.sh use sudo, set [ssh_connection] pipelining = false in ansible.cfg
+- name: install td-agent
+  shell: curl -L https://toolbelt.treasuredata.com/sh/install-redhat-td-agent2.sh | sh
+
+
