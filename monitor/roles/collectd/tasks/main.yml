@@ -2,6 +2,8 @@
 # http://docs.ansible.com/ansible/modules_by_category.html
 
 ---
+- include: ../../common/tasks/disable_selinux.yml
+
 - include: ../../common/tasks/install_rsync.yml
 
 - name: copy rpms
@@ -14,7 +16,7 @@
 # el7 | install collectd 
 - include: ./install_collectd.el7.yml
   when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'
-  
+
 - name: copy /etc/collectd.d/*.conf
   synchronize: src=./etc/collectd.d dest=/etc/ delete=yes
   
