@@ -1,0 +1,14 @@
+#!/usr/bin/ansible-playbook
+# http://docs.ansible.com/ansible/modules_by_category.html
+
+---
+# el6 | install collectd 
+- name: copy rpms
+  synchronize: src=./rpms dest=/tmp/
+
+- name: install collectd (5.5) | el6
+  yum: pkg='{{ item.pkg }}'
+  with_items:
+  - { pkg: '/tmp/rpms/collectd-5.5.0-1.el6.x86_64.rpm' }
+  - { pkg: '/tmp/rpms/collectd-python-5.5.0-1.el6.x86_64.rpm' }
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '6'

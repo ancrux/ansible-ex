@@ -1,0 +1,13 @@
+#!/usr/bin/ansible-playbook
+# http://docs.ansible.com/ansible/modules_by_category.html
+
+---
+# el7 | install collectd 
+- include: ../../common/tasks/install_epel-release.yml
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'
+  
+- name: install collectd (latest) | el7
+  yum: pkg='{{ item.pkg }}'
+  with_items:
+  - { pkg: 'collectd' }
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'
