@@ -1,3 +1,5 @@
+# ansible inventory for DEV
+
 [all:vars]
 graphite_host = "172.16.33.103"
 graphite_port = "2003"

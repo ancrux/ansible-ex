@@ -1,12 +1,14 @@
+# ansible inventory for SIT-LAB
+
 [all:vars]
-graphite_host = "172.16.33.103"
+graphite_host = "172.16.33.30"
 graphite_port = "2003"
 graphite_protocol = "udp"
 graphite_prefix = ""
 graphite_postfix = ""
 
 [monitor-db]
-"{{ graphite_host }}"
+"{{ graphite_host }}":2222
 
 [monitor-targets]
 ps-mgnt01.trend.lava.tw
