@@ -6,19 +6,26 @@
 - name: check td.repo
   stat: path=/etc/yum.repos.d/td.repo
   register: td_repo
-
-- name: install curl (present)
-  yum: pkg=curl state=present
+  
+- name: copy td.repo
+  copy: src=./etc/yum.repos.d/td.repo dest=/etc/yum.repos.d/
   when: td_repo.stat.exists == False
+  
+- name: install td-agent (present)
+  yum: pkg=td-agent state=present
+
+#- name: install curl (present)
+#  yum: pkg=curl state=present
+#  when: td_repo.stat.exists == False
 
 #- name: download installer shell script
 #  get_url: url=https://toolbelt.treasuredata.com/sh/install-redhat-td-agent2.sh dest=/tmp/install-redhat-td-agent2.sh mode=755
 #  when: td_repo.stat.exists == False
 
 # this script: install-redhat-td-agent2.sh is executed via sudo, set [ssh_connection] pipelining = false in ansible.cfg
-- name: install td-agent
-  shell: curl -L https://toolbelt.treasuredata.com/sh/install-redhat-td-agent2.sh | sh
-  when: td_repo.stat.exists == False
+#- name: install td-agent
+#  shell: curl -L https://toolbelt.treasuredata.com/sh/install-redhat-td-agent2.sh | sh
+#  when: td_repo.stat.exists == False
   
 # install fluent-plugin-elasticsearch
 - name: check fluent-plugin-elasticsearch

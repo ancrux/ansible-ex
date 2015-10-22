@@ -9,6 +9,7 @@
   roles:
   - graphite
   - graphite-beacon
+  - collectd
 
 - hosts: monitor-targets
   roles:

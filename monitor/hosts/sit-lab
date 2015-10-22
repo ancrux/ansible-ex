@@ -10,9 +10,29 @@ graphite_postfix = ""
 [monitor-db]
 "{{ graphite_host }}":2222
 
-[monitor-targets]
+[portal-servers]
 ps-mgnt01.trend.lava.tw
 ps-ap[01:04].trend.lava.tw
+
+[sco-servers]
+10.201.174.190
+10.201.174.191
+10.201.174.192
+10.201.174.194
+10.201.174.202
+
+[mysql-servers]
+10.201.78.69
+
+[build-servers]
+172.16.33.222
+172.16.33.223
+
+[monitor-targets:children]
+portal-servers
+sco-servers
+mysql-servers
+build-servers
 
 [monitor-all:children]
 monitor-targets

@@ -5,7 +5,7 @@
 # yum install -y ansible (deploy)
 # yum install -y libselinux-python (target)
 ---
-- name: install pip (latest)
+- name: install pip (present)
   yum: pkg=python-pip state=latest
   
 - name: upgrade pip (latest)

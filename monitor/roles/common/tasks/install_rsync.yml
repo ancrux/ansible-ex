@@ -5,8 +5,8 @@
 # yum install -y ansible (deploy)
 # yum install -y libselinux-python (target)
 ---
-- name: install rsync (latest)
-  yum: pkg=rsync state=latest
+- name: install rsync (present)
+  yum: pkg=rsync state=present
 
 
 
