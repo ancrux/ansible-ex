@@ -8,9 +8,11 @@
 # also install selinux-policy to ensure /etc/selinux/config is present for disabling selinux
 - name: install libselinux-python (present)
   yum: pkg=libselinux-python,selinux-policy state=present
+  when: ansible_os_family == 'RedHat'
 
 - name: disable selinux
   selinux: state=disabled
+  when: ansible_os_family == 'RedHat'
 
 
 

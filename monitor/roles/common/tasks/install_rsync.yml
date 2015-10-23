@@ -7,6 +7,11 @@
 ---
 - name: install rsync (present)
   yum: pkg=rsync state=present
+  when: ansible_os_family == 'RedHat'
+  
+- name: install rsync (present)
+  apt: pkg=rsync state=present
+  when: ansible_os_family == 'Debian'
 
 
 

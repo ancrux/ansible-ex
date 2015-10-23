@@ -1,0 +1,30 @@
+#!/usr/bin/ansible-playbook
+# http://docs.ansible.com/ansible/modules_by_category.html
+
+---
+# debian | install collectd   
+- name: install collectd (latest) | debian
+  apt: pkg='{{ item.pkg }}'
+  with_items:
+  - { pkg: 'collectd' }
+  when: ansible_os_family == 'Debian'
+  
+- name: copy /etc/collectd.d/*.conf
+  synchronize: src=./etc/collectd.d/ dest=/etc/collectd/collectd.conf.d/ delete=yes
+  when: ansible_os_family == 'Debian'
+  
+- name: setup write_graphite for collectd
+  lineinfile:
+    dest=/etc/collectd/collectd.conf.d/write_graphite.conf
+    regexp='{{ item.regexp }}'
+    line='{{ item.line }}'
+    backrefs=yes
+  with_items:
+  - { regexp: '^(\s+Host\s+)"(.*)"', line: '\1"{{ graphite_host }}"' }
+  - { regexp: '^(\s+Port\s+)"(.*)"', line: '\1"{{ graphite_port }}"' }
+  - { regexp: '^(\s+Protocol\s+)"(.*)"', line: '\1"{{ graphite_protocol }}"' }
+  - { regexp: '^(\s+Prefix\s+)"(.*)"', line: '\1"{{ graphite_prefix }}"' }
+  - { regexp: '^(\s+Postfix\s+)"(.*)"', line: '\1"{{ graphite_postfix }}"' }
+  when: ansible_os_family == 'Debian'
+  notify:
+  - restart collectd

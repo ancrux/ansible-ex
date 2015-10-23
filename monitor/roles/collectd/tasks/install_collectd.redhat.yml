@@ -1,0 +1,57 @@
+#!/usr/bin/ansible-playbook
+# http://docs.ansible.com/ansible/modules_by_category.html
+
+---
+- include: ../../common/tasks/disable_selinux.yml
+
+- include: ../../common/tasks/install_rsync.yml
+
+# el6 | install collectd  
+- name: copy rpms
+  synchronize: src=./rpms dest=/tmp/
+  when: ansible_distribution_major_version == '6'
+
+- name: install collectd (5.5) | el6
+  yum: pkg='{{ item.pkg }}'
+  with_items:
+  - { pkg: '/tmp/rpms/collectd-5.5.0-1.el6.x86_64.rpm' }
+  - { pkg: '/tmp/rpms/collectd-disk-5.5.0-1.el6.x86_64.rpm' }
+  - { pkg: '/tmp/rpms/collectd-python-5.5.0-1.el6.x86_64.rpm' }
+  when: ansible_distribution_major_version == '6'
+
+# el7 | install collectd 
+- include: ../../common/tasks/install_epel-release.yml
+  when: ansible_distribution_major_version == '7'
+  
+- name: install collectd (latest) | el7
+  yum: pkg='{{ item.pkg }}'
+  with_items:
+  - { pkg: 'collectd' }
+  when: ansible_distribution_major_version == '7'
+  
+- name: copy /etc/collectd.d/*.conf
+  synchronize: src=./etc/collectd.d dest=/etc/ delete=yes
+  
+- name: setup /etc/collectd.conf
+  lineinfile: dest=/etc/collectd.conf line='Include "/etc/collectd.d/*.conf"'
+  notify:
+  - restart collectd
+  
+- name: setup write_graphite for collectd
+  lineinfile:
+    dest=/etc/collectd.d/write_graphite.conf
+    regexp='{{ item.regexp }}'
+    line='{{ item.line }}'
+    backrefs=yes
+  with_items:
+  - { regexp: '^(\s+Host\s+)"(.*)"', line: '\1"{{ graphite_host }}"' }
+  - { regexp: '^(\s+Port\s+)"(.*)"', line: '\1"{{ graphite_port }}"' }
+  - { regexp: '^(\s+Protocol\s+)"(.*)"', line: '\1"{{ graphite_protocol }}"' }
+  - { regexp: '^(\s+Prefix\s+)"(.*)"', line: '\1"{{ graphite_prefix }}"' }
+  - { regexp: '^(\s+Postfix\s+)"(.*)"', line: '\1"{{ graphite_postfix }}"' }
+  notify:
+  - restart collectd
+
+- name: start collectd and enable it at boot
+  service: name=collectd state=started enabled=yes
+
